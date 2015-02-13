@@ -17,7 +17,7 @@ define('MySQL_User', 'root');
 /**
  * Defines MySQL Server password
  */
-define('MySQL_Pass', 'mysql');
+define('MySQL_Pass', '');
 
 /**
  * Defines MySQL Server Database Name
