@@ -78,7 +78,7 @@ class MySQLiDBTest extends PHPUnit_Framework_TestCase {
    */
   public function testSqlSafe() {
     $this->assertEquals($this->object->SqlSafe("va'lue"), "va\'lue");
-    $this->assertEquals($this->object->SqlSafe('va"lue'), 'va&quot;lue');
+    $this->assertEquals($this->object->SqlSafe('va"lue'), 'va\"lue');
   }
 
   /**
