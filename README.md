@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/abusalam/SiteRepo.svg?branch=travis-ci)](https://travis-ci.org/abusalam/SiteRepo)
+
 SiteRepo
 ========
 To Use this repository use the following commands
