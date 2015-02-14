@@ -15,5 +15,8 @@
     "phpunit/phpunit": "4.4.x-dev",
     "phpunit/phpunit-skeleton-generator": "2.0.1",
     "phpunit/dbunit": "1.3.1"
+  },
+  "autoload": {
+    "classmap": ["mpr/android/", "android/"]
   }
 }
