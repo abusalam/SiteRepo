@@ -57,7 +57,7 @@ class MprAPI extends AndroidAPI {
     $this->Resp['DB']  = $Schemes;
     $this->Resp['API'] = true;
     $this->Resp['MSG'] = 'Total Schemes: ' . count($Schemes);
-    //$this->setExpiry(3600);
+    $this->setExpiry(3600);
     unset($DB);
     unset($Schemes);
   }
@@ -120,7 +120,7 @@ class MprAPI extends AndroidAPI {
       OR $this->getNoAuthMode()
     ) {
       $DB = new MySQLiDBHelper();
-      $DB->where('UserMapID', $this->Req->UID);
+      $DB->where('UserMapID', $this->Req->UID); // TODO: UID Needs to be validated against Mobile No
       $DB->where('WorkID', $this->Req->WID);
       $UserWorks = $DB->get(MySQL_Pre . 'MPR_ViewUserWorks');
 
@@ -132,6 +132,7 @@ class MprAPI extends AndroidAPI {
           $tableData['Progress']          = $this->Req->P;
           $tableData['ReportDate']        = date("Y-m-d", time());
           $tableData['Remarks']           = $this->Req->R;
+          $tableData['MobileNo']           = $this->Req->MDN;
 
           $ProgressID = $DB->insert(MySQL_Pre . 'MPR_Progress', $tableData);
 

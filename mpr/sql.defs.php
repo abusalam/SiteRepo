@@ -114,6 +114,8 @@ function SQLDefs($ObjectName) {
         . '`ReportDate` DATE,'
         . '`Balance` BIGINT DEFAULT 0,'
         . '`Remarks` VARCHAR(300) DEFAULT NULL,'
+        . '`MobileNo` VARCHAR(10) DEFAULT NULL,'
+        . '`UpdatedOn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,'
         . ' PRIMARY KEY (`ProgressID`),'
         . ' FOREIGN KEY (`WorkID`)'
         . ' REFERENCES `' . MySQL_Pre . 'MPR_Works`(`WorkID`)'
