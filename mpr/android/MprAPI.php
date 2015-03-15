@@ -120,22 +120,38 @@ class MprAPI extends AndroidAPI {
       OR $this->getNoAuthMode()
     ) {
       $DB = new MySQLiDBHelper();
-      $DB->where('UserMapID', $this->Req->UID); //TODO: Validate User against WorkID before updating
+      $DB->where('UserMapID', $this->Req->UID);
       $DB->where('WorkID', $this->Req->WID);
       $UserWorks = $DB->get(MySQL_Pre . 'MPR_ViewUserWorks');
 
       if (count($UserWorks) > 0) {
-        $tableData['WorkID']            = $this->Req->WID;
-        $tableData['ExpenditureAmount'] = $this->Req->EA;
-        $tableData['Progress']          = $this->Req->P;
-        $tableData['ReportDate']        = date("Y-m-d", time());
-        $tableData['Remarks']           = $this->Req->R;
+        $Balance = intval(str_replace(",", "", $UserWorks[0]['Balance']));
+        if ($Balance >= $this->Req->EA) {
+          $tableData['WorkID']            = $this->Req->WID;
+          $tableData['ExpenditureAmount'] = $this->Req->EA;
+          $tableData['Progress']          = $this->Req->P;
+          $tableData['ReportDate']        = date("Y-m-d", time());
+          $tableData['Remarks']           = $this->Req->R;
 
-        $ProgressID = $DB->insert(MySQL_Pre . 'MPR_Progress', $tableData);
+          $ProgressID = $DB->insert(MySQL_Pre . 'MPR_Progress', $tableData);
 
-        $this->Resp['DB']  = $ProgressID;
-        $this->Resp['API'] = true;
-        $this->Resp['MSG'] = 'Updated Successfully!';
+          if($ProgressID){
+            $DB->where('WorkID', $this->Req->WID);
+            $UserWorks = $DB->get(MySQL_Pre . 'MPR_ViewUserWorks');
+            $this->Resp['DB'] = $UserWorks;
+            $this->Resp['API']        = true;
+            $this->Resp['MSG']        = 'Updated Successfully!';
+          } else {
+            $this->Resp['API'] = false;
+            $this->Resp['MSG'] = 'Unable To Update Progress.';
+          }
+        } else {
+          $this->Resp['API'] = false;
+          $this->Resp['MSG'] = 'Insufficient Balance.';
+        }
+      } else {
+        $this->Resp['API'] = false;
+        $this->Resp['MSG'] = 'WorkID:' . $this->Req->WID . ' is Not Assigned To You.';
       }
     } else {
       $this->Resp['API'] = false;
