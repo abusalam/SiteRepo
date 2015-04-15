@@ -34,8 +34,10 @@ class AndroidAPI {
   protected $Resp;
   private $Expiry;
   private $NoAuthMode;
+  private $IntervalRU;
 
-  function __construct($jsonData,$mNoAuthMode=false) {
+  function __construct($jsonData, $mNoAuthMode = false) {
+    $this->IntervalRU = 3600;
     $this->Resp['ET'] = time();
     $this->Expiry     = null;
     $this->Req        = $jsonData;
@@ -129,17 +131,27 @@ class AndroidAPI {
    *
    */
   protected function RU() {
-    $DB               = new MySQLiDBHelper();
-    $Data['MobileNo'] = $this->Req->MDN;
+    $DB                    = new MySQLiDBHelper();
+    $this->Resp['SendSMS'] = false;
+    $Data['MobileNo']      = $this->Req->MDN;
     $DB->where('MobileNo', $Data['MobileNo']);
-    $Profile = $DB->query('Select UserName, Designation, eMailID FROM ' . MySQL_Pre . 'APP_Users');
+    $Profile = $DB->query('Select UserName, Designation, eMailID, LastAccessTime '
+      . 'FROM ' . MySQL_Pre . 'APP_Users');
     if (count($Profile) == 0) {
       $DB->insert(MySQL_Pre . 'APP_Users', $Data);
+      $this->Resp['SendSMS'] = true;
+    } elseif ((time() - strtotime($Profile[0]['LastAccessTime'])) > $this->IntervalRU) {
+      $this->Resp['SendSMS']     = true;
+      $this->Resp['TimeElapsed'] = time() - strtotime($Profile[0]['LastAccessTime']);
+    } else {
+      $this->Resp['TimeElapsed'] = $Profile[0]['LastAccessTime'];
     }
-    $AuthUser = new AuthOTP(1);
-    $AuthUser->deleteUser($this->Req->MDN);
-    $SecretKey = $AuthUser->setUser($this->Req->MDN, "HOTP");
-    SMSGW::SendSMS('Activation Key: ' . $SecretKey, $this->Req->MDN);
+    if ($this->Resp['SendSMS'] === true) {
+      $AuthUser = new AuthOTP(1);
+      $AuthUser->deleteUser($this->Req->MDN);
+      $SecretKey = $AuthUser->setUser($this->Req->MDN, "HOTP");
+      SMSGW::SendSMS('Activation Key: ' . $SecretKey . "\nValid for 1 Hours.", $this->Req->MDN);
+    }
     $this->Resp['MSG']     = "Please enter the Activation Key Sent to Mobile No. " . $this->Req->MDN;
     $this->Resp['API']     = true;
     $fieldData['MobileNo'] = $this->Req->MDN;
