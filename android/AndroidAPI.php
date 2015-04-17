@@ -150,7 +150,7 @@ class AndroidAPI {
       $AuthUser = new AuthOTP(1);
       $AuthUser->deleteUser($this->Req->MDN);
       $SecretKey = $AuthUser->setUser($this->Req->MDN, "HOTP");
-      SMSGW::SendSMS('Activation Key: ' . $SecretKey . "\nValid for 1 Hours.", $this->Req->MDN);
+      SMSGW::SendSMS('Activation Key: ' . $SecretKey . "\nValid for 1 Hour.", $this->Req->MDN);
     }
     $this->Resp['MSG']     = "Please enter the Activation Key Sent to Mobile No. " . $this->Req->MDN;
     $this->Resp['API']     = true;

@@ -212,12 +212,13 @@ function SQLDefs($ObjectName) {
     case 'MPR_ViewWorkerSchemes':
       $SqlDB = 'CREATE OR REPLACE VIEW `' . MySQL_Pre . $ObjectName . '` AS '
         . 'select `W`.`SchemeID` AS `SchemeID`,`S`.`SchemeName` AS `SchemeName`,'
-        . '`M`.`UserMapID` AS `UserMapID`'
+        . '`M`.`UserMapID` AS `UserMapID`,`U`.`UserName` AS `UserName`,`U`.`MobileNo` AS `MobileNo`'
         . ' from (`' . MySQL_Pre . 'MPR_UserMaps` `M` join `' . MySQL_Pre . 'MPR_Works` `W`'
         . ' on(`M`.`MprMapID` = `W`.`MprMapID`)) join `' . MySQL_Pre . 'MPR_Schemes` `S`'
-        . ' on(`S`.`SchemeID`=`W`.`SchemeID`) '
-        . 'Group By `S`.`SchemeID`,`S`.`SchemeName`,`M`.`UserMapID` '
-        . 'Order By `S`.`SchemeName`;';
+        . ' on(`S`.`SchemeID`=`W`.`SchemeID`) join `' . MySQL_Pre . 'Users` `U`'
+        . ' on(`U`.`UserMapID`=`M`.`UserMapID`) '
+        . 'Group By `S`.`SchemeID`,`S`.`SchemeName`,`M`.`UserMapID`,`U`.`UserName`,`U`.`MobileNo` '
+        . 'Order By `U`.`UserName`;';
       break;
 
     case 'MPR_ViewSchemeWiseExpenditure':

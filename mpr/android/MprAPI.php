@@ -57,9 +57,38 @@ class MprAPI extends AndroidAPI {
     $this->Resp['DB']  = $Schemes;
     $this->Resp['API'] = true;
     $this->Resp['MSG'] = 'Total Schemes: ' . count($Schemes);
-    $this->setExpiry(3600);
+    //$this->setExpiry(3600);
     unset($DB);
     unset($Schemes);
+  }
+
+
+  /**
+   * Scheme Users: Retrieve all the Users for the Scheme
+   *
+   * Request:
+   *   JSONObject={"API":"SU",
+   *               "SID":"17"}
+   *
+   * Response:
+   *    JSONObject={"API":true,
+   *               "DB":[{"UN":"BDO Sadar","ID":"12"},{"UN":"BDO Debra","ID":"15"}],
+   *               "MSG":"All Users Loaded",
+   *               "ET":2.0987,
+   *               "ST":"Wed 20 Aug 08:31:23 PM"}
+   */
+  protected function SU() {
+    $DB = new MySQLiDBHelper();
+    $DB->where('SchemeID', $this->Req->SID);
+    $Users = $DB->query('Select `UserName` as `UN`, `UserMapID` as `ID`,`MobileNo` as `M`, '
+      . ' \'0,000,00\' as `F`, \'0,000,00\' as `B`, \'Schemes\' as `S` FROM '
+      . MySQL_Pre . 'MPR_ViewWorkerSchemes');
+    $this->Resp['DB']  = $Users;
+    $this->Resp['API'] = true;
+    $this->Resp['MSG'] = 'Total Users: ' . count($Users);
+    //$this->setExpiry(3600);
+    unset($DB);
+    unset($Users);
   }
 
   /**
