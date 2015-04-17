@@ -68,6 +68,7 @@ class MprAPI extends AndroidAPI {
    *
    * Request:
    *   JSONObject={"API":"SU",
+   *               "UID":"80",
    *               "SID":"17"}
    *
    * Response:
@@ -79,10 +80,17 @@ class MprAPI extends AndroidAPI {
    */
   protected function SU() {
     $DB = new MySQLiDBHelper();
+    $DB->where('UserMapID', $this->Req->UID);
     $DB->where('SchemeID', $this->Req->SID);
     $Users = $DB->query('Select `UserName` as `UN`, `UserMapID` as `ID`,`MobileNo` as `M`, '
       . ' \'0,000,00\' as `F`, \'0,000,00\' as `B`, \'Schemes\' as `S` FROM '
       . MySQL_Pre . 'MPR_ViewWorkerSchemes');
+    if(count($Users)==0){
+      $DB->where('SchemeID', $this->Req->SID);
+      $Users = $DB->query('Select `UserName` as `UN`, `UserMapID` as `ID`,`MobileNo` as `M`, '
+        . ' \'0,000,00\' as `F`, \'0,000,00\' as `B`, \'Schemes\' as `S` FROM '
+        . MySQL_Pre . 'MPR_ViewWorkerSchemes');
+    }
     $this->Resp['DB']  = $Users;
     $this->Resp['API'] = true;
     $this->Resp['MSG'] = 'Total Users: ' . count($Users);
