@@ -53,11 +53,12 @@ function SQLDefs($ObjectName) {
       $SqlDB = 'INSERT INTO `' . MySQL_Pre . 'MenuItems` '
           . '(`AppID`,`MenuOrder`,`AuthMenu`,`Caption`,`URL`,`Activated`) VALUES'
           . '(\'SMS\', 1, 0, \'Home\', \'index.php\', 1),'
-          . '(\'SMS\', 2, 1, \'SMS Template\', \'BulkSMS/Compose.php\', 1),'
-          . '(\'SMS\', 3, 1, \'Send Bulk SMS\', \'BulkSMS/SendSMS.php\', 1),'
-          . '(\'SMS\', 4, 1, \'Delivery Status\', \'BulkSMS/Status.php\', 1),'
-          . '(\'SMS\', 5, 1, \'Reports\', \'BulkSMS/Reports.php\', 1),'
-          . '(\'SMS\', 6, 1, \'Log Out!\', \'login.php?LogOut=1\', 1);';
+          . '(\'SMS\', 2, 1, \'Contacts\', \'BulkSMS/Contacts.php\', 1),'
+          . '(\'SMS\', 3, 1, \'SMS Template\', \'BulkSMS/Compose.php\', 1),'
+          . '(\'SMS\', 4, 1, \'Send Bulk SMS\', \'BulkSMS/SendSMS.php\', 1),'
+          . '(\'SMS\', 5, 1, \'Delivery Status\', \'BulkSMS/Status.php\', 1),'
+          . '(\'SMS\', 6, 1, \'Reports\', \'BulkSMS/Reports.php\', 1),'
+          . '(\'SMS\', 7, 1, \'Log Out!\', \'login.php?LogOut=1\', 1);';
       break;
   }
   return $SqlDB;
