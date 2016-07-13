@@ -222,7 +222,7 @@ class MessageAPI extends AndroidAPI {
    * Add new Contact
    *
    * Request:
-   *   JSONObject={"API":"RM",
+   *   JSONObject={"API":"AC",
    *               "MDN":"9876543210",
    *               "MN":"9876543210",
    *               "NM":"Contact Name",
@@ -255,10 +255,10 @@ class MessageAPI extends AndroidAPI {
   }
 
   /**
-   * Add a Member from a Group
+   * Add a Member to a Group
    *
    * Request:
-   *   JSONObject={"API":"RM",
+   *   JSONObject={"API":"AM",
    *               "MDN":"9876543210",
    *               "CID":"20",
    *               "GRP":"BDO",

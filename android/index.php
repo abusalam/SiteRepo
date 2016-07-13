@@ -8,7 +8,7 @@ session_start();
 
 WebLib::CreateDB();
 
-$AuthOTP = new AuthOTP();
+$AuthOTP = new AuthOTP(AuthOTP::TOKEN_DATA_TEMP);
 
 //$AuthOTP->setUser('1', 'TOTP');
 
@@ -28,6 +28,7 @@ $AuthOTP = new AuthOTP();
   // GA4PHP, but for this example, we need to be able to create users, so heres where
   // you do it.
   $MobileNo = $_SESSION['MobileNo']; //$_GET['mdn'];
+  $CheckCodes = '';
   if ($AuthOTP->hasToken($MobileNo)) {
     $hastoken = "Yes";
     $type     = $AuthOTP->getTokenType($MobileNo);
